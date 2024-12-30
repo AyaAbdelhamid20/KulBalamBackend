@@ -293,3 +293,22 @@ class UserProductDisplay(BaseModel):
     products: List[Product] = []
     class Config():
         from_attributes = True
+
+class PostLikes(BaseModel):
+    id : int
+    like : bool
+    post_id : int
+    user_id :int
+    #created_at: datetime = datetime.now()
+
+class PostLikesDisplay(BaseModel):
+    id: int
+    like : bool
+    post_id : int
+    user_id :int
+    created_at: datetime = datetime.now()
+    class Config():
+        from_attributes = True
+
+class PostLikesUpdate(BaseModel):
+    like : bool

@@ -43,6 +43,8 @@ class DbUser(Base):
     # Relationship with review
     review = relationship ('DbProductReview', back_populates='creator_username')
 
+    post_like = relationship('DbPostLikes', back_populates='user_like')
+
 class DbUserImage(Base):
     __tablename__= 'user_image'
     id = Column (Integer, primary_key=True, index=True)
@@ -75,6 +77,7 @@ class DbPost(Base):
     user = relationship('DbUser', back_populates='posts')
     images = relationship ('DbPostImage', back_populates='post')
     comments = relationship('DbComment', back_populates= 'post', cascade="all, delete")
+    post_like= relationship('DbPostLikes', back_populates='post_likes')
 
 
 class DbPostImage(Base):
@@ -175,3 +178,13 @@ class DbProductReview(Base):
     creator_id = Column (Integer, ForeignKey('users.id'))
     creator_username = relationship ('DbUser', back_populates='review')
     product = relationship ('DbProduct', back_populates='reviews')
+
+class DbPostLikes(Base):
+    __tablename__ = 'post_likes'
+    id = Column(Integer, primary_key=True, index= True)
+    like = Column(Boolean)
+    post_id = Column(Integer, ForeignKey('posts.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    created_at = Column(DateTime)
+    user_like = relationship('DbUser',back_populates='post_like',foreign_keys=[user_id])
+    post_likes = relationship('DbPost',back_populates='post_like', foreign_keys=[post_id])

@@ -2,7 +2,7 @@ from schemas import PostBase, PostDisplay, PostImage, PostUpdate, UserBase
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from db.database import get_db
-from db import db_post, db_user, db_post_images
+from db import db_post, db_user, db_post_images, db_post_likes
 from auth.oauth2 import get_current_user
 from datetime import datetime
 
@@ -42,7 +42,8 @@ def posts(db: Session = Depends(get_db)):
 @router.get('/posts/{id}') #, response_model=PostDisplay)
 def get_post(id:int, db:Session = Depends(get_db)): #secure end-point #token: str = Depends(oauth2_scheme)
     return {
-        'data': db_post.get_post(db,id)
+        'data': db_post.get_post(db,id), 
+        'likes': db_post_likes.calculate_likes(id, db)
     }
 
 #Update Post
